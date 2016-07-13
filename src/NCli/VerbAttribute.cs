@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace NCli
 {
@@ -10,10 +7,10 @@ namespace NCli
         public string HelpText { get; set; }
         public string Usage { get; set; }
         public bool Show { get; set; } = true;
-        internal string[] LongNames { get; }
-        public VerbAttribute(params string[] longNames)
+        internal string[] Names { get; }
+        public VerbAttribute(params string[] names)
         {
-            LongNames = longNames;
+            Names = names;
         }
     }
 }
