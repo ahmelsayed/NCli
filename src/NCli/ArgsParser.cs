@@ -179,14 +179,26 @@ namespace NCli
         private static VerbAttribute TypeToAttribute(Type type)
         {
             var attribute = type.GetTypeInfo().GetCustomAttribute<VerbAttribute>();
+            var verbIndex = type.Name.LastIndexOf("verb", StringComparison.OrdinalIgnoreCase);
+            var verbName = verbIndex == -1 ? type.Name : type.Name.Substring(0, verbIndex);
 
             if (attribute == null)
             {
-                var verbIndex = type.Name.LastIndexOf("command", StringComparison.OrdinalIgnoreCase);
-                return new VerbAttribute(verbIndex == -1 ? type.Name : type.Name.Substring(0, verbIndex));
+                return new VerbAttribute(verbName);
             }
-
-            return attribute;
+            else if (attribute.Names == null || attribute.Names.Length == 0)
+            {
+                return new VerbAttribute(verbName)
+                {
+                    HelpText = attribute.HelpText,
+                    Show = attribute.Show,
+                    Usage = attribute.Usage
+                };
+            }
+            else
+            {
+                return attribute;
+            }
         }
 
         private static T InstantiateType<T>(Type type)
